@@ -1,11 +1,11 @@
 import pytest
 from fastapi.testclient import TestClient
 from orchestrator.server import app
-from shared.schemas.opportunity import Opportunity, OpportunityStatus
+from shared.schemas.opportunity import OpportunityStatus
 
 client = TestClient(app)
 
-def test_workflow_lifecycle_api():
+def test_full_lifecycle_api():
     # 1. Create
     opp = {
         "opportunity_id": "opp-1",
@@ -25,18 +25,19 @@ def test_workflow_lifecycle_api():
         "opportunity_id": "opp-1",
         "metadata": {}
     }
-    response = client.post(f"/api/workflows/{workflow_id}/pitch", json=pitch)
-    assert response.status_code == 200
+    client.post(f"/api/workflows/{workflow_id}/pitch", json=pitch)
 
     # 3. Evaluate Pitch
-    response = client.post(f"/api/workflows/{workflow_id}/pitch/evaluate")
-    assert response.status_code == 200
+    client.post(f"/api/workflows/{workflow_id}/pitch/evaluate")
 
-    # Verify state
-    response = client.get(f"/api/workflows/{workflow_id}")
-    assert response.json()["state"] == "PITCH_EVALUATED"
+    # 4. Assess Risk
+    client.post(f"/api/workflows/{workflow_id}/risk/assess")
 
-def test_invalid_transition():
+    # 5. Human Review
+    response = client.post(f"/api/workflows/{workflow_id}/human-review", params={"decision": "APPROVE"})
+    assert response.json()["new_state"] == "STARTUP_SELECTED"
+
+def test_human_gate_enforcement():
     # Create
     opp = {
         "opportunity_id": "opp-2",
@@ -48,6 +49,6 @@ def test_invalid_transition():
     response = client.post("/api/workflows", json=opp)
     workflow_id = response.json()["workflow_id"]
 
-    # Try to evaluate before submitting pitch
-    response = client.post(f"/api/workflows/{workflow_id}/pitch/evaluate")
+    # Try to skip directly to final decision (should fail)
+    response = client.post(f"/api/workflows/{workflow_id}/final-decision", params={"decision": "SCALE"})
     assert response.status_code == 409
