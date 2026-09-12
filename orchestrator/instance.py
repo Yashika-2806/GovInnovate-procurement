@@ -9,6 +9,14 @@ from shared.schemas.evaluation_result import EvaluationResult
 import uuid
 from datetime import datetime
 
+from shared.schemas.startup_selection import StartupSelection
+from shared.schemas.pilot import Pilot
+from shared.schemas.milestone import Milestone
+from shared.schemas.evidence import Evidence
+from shared.schemas.remediation import Remediation
+from shared.schemas.performance import PerformanceProfile
+from shared.schemas.scale_recommendation import ScaleRecommendation
+
 class WorkflowInstance:
     def __init__(self, workflow_id: str, opportunity: Opportunity):
         self.workflow_id = workflow_id
@@ -18,6 +26,12 @@ class WorkflowInstance:
         self.evaluation: Optional[PitchEvaluation] = None
         self.risk_assessment: Optional[RiskAssessment] = None
         self.evaluation_result: Optional[EvaluationResult] = None
+        self.pilot: Optional[Pilot] = None
+        self.milestones: Dict[str, Milestone] = {}
+        self.evidence: Dict[str, List[Evidence]] = {}
+        self.remediations: Dict[str, Remediation] = {}
+        self.performance: Optional[PerformanceProfile] = None
+        self.scale_recommendation: Optional[ScaleRecommendation] = None
         self.state = ProcurementState.OPPORTUNITY_DISCOVERED
         self.history: List[AuditEvent] = []
 
@@ -50,4 +64,6 @@ class WorkflowInstance:
             "opportunity_id": self.opportunity.id,
             "state": self.state.name,
             "startup_id": self.startup_id,
+            "pilot": self.pilot.dict() if self.pilot else None,
+            "milestones": {k: v.dict() for k, v in self.milestones.items()},
         }
