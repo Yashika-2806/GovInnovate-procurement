@@ -19,4 +19,5 @@ class ProcurementState(Enum):
     SCALE_RECOMMENDATION = auto()
     AWAITING_FINAL_DECISION = auto()
     HUMAN_FINAL_DECISION = auto()
+    COMPLETED = auto()
     FAILED = auto()

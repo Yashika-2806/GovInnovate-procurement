@@ -138,22 +138,57 @@ class WorkflowInstance:
         self.transition_to(ProcurementState.REMEDIATION, "REMEDIATION_SUBMITTED", f"Remediation submitted for {remediation.milestone_id}")
 
     def final_evaluation(self, evaluation: EvaluationResult):
+        # Build evaluation from actual workflow data
+        milestone_results = {}
+        for m_id, m in self.milestones.items():
+            ev_list = self.evidence.get(m_id, [])
+            milestone_results[m_id] = {
+                "status": m.status,
+                "evidence_count": len(ev_list),
+                "verified": sum(1 for e in ev_list if getattr(e, 'status', '') == 'verified')
+            }
+        # Persist evaluation using actual context; if evaluation object missing, construct one
+        if evaluation is None:
+            evaluation = EvaluationResult(
+                evaluation_id=str(uuid.uuid4()),
+                milestone_id=list(self.milestones.keys())[0] if self.milestones else "",
+                status="PASS" if all(r["status"] == "completed" for r in milestone_results.values()) else "FAIL",
+                kpi_measurements=[],
+                evidence_submitted=[],
+                explanation=f"Final evaluation based on {len(self.milestones)} milestones, pilot {self.pilot.pilot_id if self.pilot else None}, remediations {len(self.remediations)}.",
+                confidence=0.85,
+                recommendation="Scale if all milestones pass"
+            )
         self.evaluation_result = evaluation
-        self.transition_to(ProcurementState.FINAL_EVALUATION, "FINAL_EVALUATION", "Final evaluation completed")
+        self.transition_to(ProcurementState.FINAL_EVALUATION, "FINAL_EVALUATION", f"Final evaluation completed: {evaluation.status}")
 
     def final_decision(self, decision: str):
         # Must come from AWAITING_FINAL_DECISION
         if self.state != ProcurementState.AWAITING_FINAL_DECISION:
             raise ValueError("Final decision allowed only from AWAITING_FINAL_DECISION")
-        self.transition_to(ProcurementState.HUMAN_FINAL_DECISION, "FINAL_DECISION", f"Final decision: {decision}")
+        if decision == "APPROVE":
+            new_state = ProcurementState.HUMAN_FINAL_DECISION
+        elif decision == "REJECT":
+            new_state = ProcurementState.FAILED
+        else:
+            raise ValueError("Decision must be APPROVE or REJECT")
+        self.transition_to(new_state, "FINAL_DECISION", f"Final decision: {decision}")
+        # If approved, complete immediately (human approval = procurement complete)
+        if decision == "APPROVE" and new_state == ProcurementState.HUMAN_FINAL_DECISION:
+            self.transition_to(ProcurementState.COMPLETED, "COMPLETED", "Procurement completed after final human approval")
 
     def submit_scale_recommendation(self, recommendation: ScaleRecommendation):
         self.scale_recommendation = recommendation
-        self.transition_to(ProcurementState.SCALE_RECOMMENDATION, "SCALE_RECOMMENDATION", f"Scale recommendation: {recommendation.recommendation}")
+        # If coming from PERFORMANCE_UPDATED, transition to AWAITING_FINAL_DECISION directly (not SCALE_RECOMMENDATION state)
+        if self.state == ProcurementState.PERFORMANCE_UPDATED:
+            self.transition_to(ProcurementState.AWAITING_FINAL_DECISION, "SCALE_RECOMMENDATION", f"Scale recommendation: {recommendation.recommendation} — ready for final human decision")
+        else:
+            self.transition_to(ProcurementState.SCALE_RECOMMENDATION, "SCALE_RECOMMENDATION", f"Scale recommendation: {recommendation.recommendation}")
 
     def update_performance(self, performance: PerformanceProfile):
+        # Use actual pilot info; don't mutate Pydantic fields that don't exist
         self.performance = performance
-        self.transition_to(ProcurementState.PERFORMANCE_UPDATED, "PERFORMANCE_UPDATED", "Performance profile updated")
+        self.transition_to(ProcurementState.PERFORMANCE_UPDATED, "PERFORMANCE_UPDATED", f"Performance profile updated for startup {self.startup_id}")
 
     def _validate_transition(self, new_state: ProcurementState):
         allowed = {
@@ -167,13 +202,14 @@ class WorkflowInstance:
             ProcurementState.PILOT_CREATED: [ProcurementState.MILESTONE_ACTIVE, ProcurementState.MILESTONE_EVALUATED],
             ProcurementState.MILESTONE_ACTIVE: [ProcurementState.EVIDENCE_SUBMITTED, ProcurementState.REMEDIATION],
             ProcurementState.EVIDENCE_SUBMITTED: [ProcurementState.MILESTONE_EVALUATED, ProcurementState.REMEDIATION, ProcurementState.SCALE_RECOMMENDATION],
-            ProcurementState.MILESTONE_EVALUATED: [ProcurementState.NEXT_MILESTONE, ProcurementState.SCALE_RECOMMENDATION, ProcurementState.REMEDIATION, ProcurementState.AWAITING_FINAL_DECISION, ProcurementState.PERFORMANCE_UPDATED],
+            ProcurementState.MILESTONE_EVALUATED: [ProcurementState.NEXT_MILESTONE, ProcurementState.SCALE_RECOMMENDATION, ProcurementState.REMEDIATION, ProcurementState.AWAITING_FINAL_DECISION, ProcurementState.PERFORMANCE_UPDATED, ProcurementState.FINAL_EVALUATION],
             ProcurementState.REMEDIATION: [ProcurementState.EVIDENCE_SUBMITTED],
             ProcurementState.NEXT_MILESTONE: [ProcurementState.MILESTONE_ACTIVE, ProcurementState.EVIDENCE_SUBMITTED],
             ProcurementState.FINAL_EVALUATION: [ProcurementState.PERFORMANCE_UPDATED],
             ProcurementState.PERFORMANCE_UPDATED: [ProcurementState.SCALE_RECOMMENDATION],
-            ProcurementState.SCALE_RECOMMENDATION: [ProcurementState.AWAITING_FINAL_DECISION],
+            ProcurementState.SCALE_RECOMMENDATION: [ProcurementState.AWAITING_FINAL_DECISION, ProcurementState.HUMAN_FINAL_DECISION, ProcurementState.COMPLETED],
             ProcurementState.AWAITING_FINAL_DECISION: [ProcurementState.HUMAN_FINAL_DECISION],
+            ProcurementState.HUMAN_FINAL_DECISION: [ProcurementState.COMPLETED, ProcurementState.FAILED],
         }
         if new_state not in allowed.get(self.state, []):
             raise ValueError(f"Invalid transition from {self.state.name} to {new_state.name}")
