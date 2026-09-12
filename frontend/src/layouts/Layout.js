@@ -1,0 +1,3 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export const Layout = ({ children }) => (_jsxs("div", { style: { display: 'flex', minHeight: '100vh' }, children: [_jsxs("nav", { style: { width: '200px', background: '#f0f0f0', padding: '20px' }, children: [_jsx("h2", { children: "GovInnovate" }), _jsx("ul", { style: { listStyle: 'none', padding: 0 }, children: _jsx("li", { children: "Dashboard" }) })] }), _jsx("main", { style: { flex: 1, padding: '20px' }, children: children })] }));
+//# sourceMappingURL=Layout.js.map
