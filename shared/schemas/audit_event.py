@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 from .base_entities import Evidence
 
@@ -10,6 +10,8 @@ class AuditEvent(BaseModel):
     entity_id: str
     event_type: str
     reason: str
+    previous_state: Optional[str] = None
+    new_state: Optional[str] = None
     relevant_agent: Optional[str] = None
     success: bool
     evidence_references: List[Evidence] = Field(default_factory=list)
