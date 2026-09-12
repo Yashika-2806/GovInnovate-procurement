@@ -16,6 +16,17 @@ def test_extended_lifecycle_api():
     response = client.post("/api/workflows", json=opp)
     workflow_id = response.json()["workflow_id"]
 
+    # 1.5. Full Lifecycle to reach STARTUP_SELECTED
+    # Submit Pitch
+    pitch = {"pitch_id": "p1", "startup_id": "s1", "opportunity_id": "opp-1", "metadata": {}}
+    client.post(f"/api/workflows/{workflow_id}/pitch", json=pitch)
+    # Evaluate Pitch
+    client.post(f"/api/workflows/{workflow_id}/pitch/evaluate")
+    # Assess Risk
+    client.post(f"/api/workflows/{workflow_id}/risk/assess")
+    # Human Review
+    client.post(f"/api/workflows/{workflow_id}/human-review", params={"decision": "APPROVE"})
+
     # 2. Startup Selection
     startup_data = {
         "startup_id": "s1",
