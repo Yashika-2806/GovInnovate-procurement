@@ -16,6 +16,7 @@
 - `POST /api/workflows/{workflow_id}/pitch/evaluate`: Run pitch evaluation
 - `POST /api/workflows/{workflow_id}/risk/assess`: Run risk assessment
 - `POST /api/workflows/{workflow_id}/human-review`: Submit human review decision
+- `POST /api/workflows/{workflow_id}/milestones/{milestone_id}/evaluate`: Evaluate milestone
 - `POST /api/workflows/{workflow_id}/final-decision`: Submit final human decision
 
 ## Known Limitations & Security
