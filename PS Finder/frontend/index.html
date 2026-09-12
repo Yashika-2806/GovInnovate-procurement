@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PS Finder — Verified Problem &amp; Challenge Discovery</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --panel-2: #1c2330; --border: #2a3441;
+    --text: #e6edf3; --muted: #9aa7b4; --accent: #2f81f7; --accent-2: #1f6feb;
+    --green: #3fb950; --amber: #d29922; --red: #f85149; --chip: #21304a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: var(--accent); }
+  header {
+    background: linear-gradient(180deg, #111826, #0d1117);
+    border-bottom: 1px solid var(--border); padding: 18px 24px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .brand h1 { font-size: 20px; margin: 0; letter-spacing: .2px; }
+  .brand .tag { color: var(--muted); font-size: 13px; }
+  .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: #bcd; border: 1px solid var(--border); }
+  .honesty {
+    margin-top: 10px; font-size: 12.5px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .honesty b { color: var(--green); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 20px 24px 60px; }
+  .controls {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px;
+  }
+  .controls input, .controls select {
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 10px; font-size: 13.5px; outline: none;
+  }
+  .controls input:focus, .controls select:focus { border-color: var(--accent); }
+  #q { flex: 1; min-width: 200px; }
+  button {
+    background: var(--accent-2); color: #fff; border: 1px solid var(--accent-2);
+    border-radius: 8px; padding: 8px 14px; font-size: 13.5px; cursor: pointer; font-weight: 600;
+  }
+  button:hover { background: var(--accent); border-color: var(--accent); }
+  button.ghost { background: transparent; color: var(--text); border-color: var(--border); font-weight: 500; }
+  button.ghost:hover { border-color: var(--accent); color: var(--accent); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  .statusbar { margin: 14px 2px; font-size: 13px; color: var(--muted); min-height: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; cursor: pointer; transition: border-color .15s, transform .05s;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card:active { transform: translateY(1px); }
+  .card h3 { margin: 0; font-size: 15.5px; line-height: 1.35; }
+  .card .org { color: var(--muted); font-size: 12.5px; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: .3px; }
+  .b-active { background: rgba(63,185,80,.15); color: var(--green); border: 1px solid rgba(63,185,80,.35); }
+  .b-closed { background: rgba(210,153,34,.15); color: var(--amber); border: 1px solid rgba(210,153,34,.35); }
+  .b-expired { background: rgba(248,81,73,.13); color: var(--red); border: 1px solid rgba(248,81,73,.35); }
+  .b-verified { background: rgba(47,129,247,.14); color: #6cb0ff; border: 1px solid rgba(47,129,247,.4); }
+  .chips { display: flex; gap: 5px; flex-wrap: wrap; }
+  .chip { font-size: 11px; background: var(--chip); border: 1px solid var(--border); color: #b6c6dd; padding: 2px 7px; border-radius: 999px; }
+  .meta { font-size: 12.5px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+  .meta b { color: var(--text); font-weight: 600; }
+  .empty { text-align: center; color: var(--muted); padding: 60px 20px; }
+  /* modal */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: none; align-items: flex-start; justify-content: center; padding: 30px 16px; overflow-y: auto; z-index: 50; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; max-width: 820px; width: 100%; padding: 0; }
+  .modal-head { padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--panel); border-radius: 14px 14px 0 0; }
+  .modal-head h2 { margin: 0 0 6px; font-size: 18px; }
+  .modal-body { padding: 18px 22px 26px; }
+  .close-x { position: absolute; top: 14px; right: 16px; background: transparent; border: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 6px; }
+  .close-x:hover { color: var(--text); }
+  .section { margin: 16px 0; }
+  .section h4 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--accent); }
+  .section p, .section li { font-size: 14px; margin: 3px 0; }
+  .kv { display: grid; grid-template-columns: 150px 1fr; gap: 6px 14px; font-size: 13.5px; }
+  .kv .k { color: var(--muted); }
+  .nis { color: var(--muted); font-style: italic; }
+  .src-box { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; word-break: break-all; }
+  .tabs { display: flex; gap: 8px; margin: 4px 0 12px; }
+  .tabs button { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .tabs button.active { color: #fff; background: var(--accent-2); border-color: var(--accent-2); }
+  .critic { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green); margin-bottom: 8px; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; vertical-align: -2px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 10px; font-size: 13px; display: none; z-index: 100; }
+  .toast.show { display: block; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>PS&nbsp;Finder</h1>
+    <span class="tag">Verified Problem &amp; Challenge Discovery Agent</span>
+    <span class="pill">SIH26136</span>
+    <span class="pill">Team ALPHA</span>
+  </div>
+  <div class="honesty">
+    <span>🔒</span>
+    <span>Shows <b>only officially verified, publicly-published</b> opportunities from authoritative sources (.gov.in / mygov.in). Never AI-generated — absent facts are shown as <i>"Not specified in the source."</i></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="controls">
+    <input id="q" type="text" placeholder="Search title, organization, or problem…" />
+    <select id="status">
+      <option value="">All statuses</option>
+      <option value="ACTIVE" selected>Active</option>
+      <option value="CLOSED">Closed</option>
+      <option value="EXPIRED">Expired</option>
+    </select>
+    <input id="domain" type="text" placeholder="Domain (e.g. energy)" style="width:170px" />
+    <button id="searchBtn" onclick="loadList()">Search</button>
+    <button class="ghost" id="discoverBtn" onclick="runDiscovery()">↻ Run Discovery</button>
+    <button class="ghost" id="monitorBtn" onclick="runMonitoring()">◷ Run Monitoring</button>
+  </div>
+
+  <div class="statusbar" id="statusbar">Loading verified opportunities…</div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <button class="close-x" onclick="closeModal()">&times;</button>
+      <h2 id="m-title">—</h2>
+      <div class="badges" id="m-badges"></div>
+    </div>
+    <div class="modal-body">
+      <div class="tabs">
+        <button id="tab-details" class="active" onclick="switchTab('details')">Details</button>
+        <button id="tab-explain" onclick="switchTab('explain')">Explain Problem</button>
+        <button id="tab-history" onclick="switchTab('history')">History</button>
+        <button id="tab-source" onclick="switchTab('source')">Source</button>
+      </div>
+      <div id="pane-details"></div>
+      <div id="pane-explain" style="display:none"></div>
+      <div id="pane-history" style="display:none"></div>
+      <div id="pane-source" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// When served by FastAPI (mounted at /), same-origin. When opened as a file, hit local API.
+const API = (location.protocol === "file:") ? "http://localhost:8000" : "";
+let CURRENT = null;           // currently opened opportunity object
+const explainCache = {};      // opp_id -> explain response
+
+function esc(s){ return String(s ?? "").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),3200); }
+
+function statusBadge(s){
+  const cls = s==="ACTIVE"?"b-active":s==="CLOSED"?"b-closed":"b-expired";
+  return `<span class="badge ${cls}">${esc(s)}</span>`;
+}
+function prizeText(p){
+  if(!p) return null;
+  if(p.raw_text) return p.raw_text;
+  if(p.amount) return `${p.currency||'INR'} ${Number(p.amount).toLocaleString('en-IN')}`;
+  return null;
+}
+
+async function loadList(){
+  const q = document.getElementById('q').value.trim();
+  const status = document.getElementById('status').value;
+  const domain = document.getElementById('domain').value.trim();
+  const params = new URLSearchParams();
+  if(q) params.set('q', q);
+  if(status) params.set('status', status);
+  if(domain) params.set('domain', domain);
+  params.set('page_size','100');
+  const bar = document.getElementById('statusbar');
+  bar.innerHTML = '<span class="spinner"></span> Loading…';
+  try {
+    const r = await fetch(`${API}/api/opportunities?${params.toString()}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    renderList(data.items || []);
+    bar.innerHTML = `<b>${data.total}</b> verified opportunit${data.total===1?'y':'ies'} shown.`;
+  } catch(e){
+    bar.innerHTML = `<span style="color:var(--red)">Could not reach the API (${esc(e.message)}). Is the server running on :8000?</span>`;
+    document.getElementById('grid').innerHTML='';
+  }
+}
+
+function renderList(items){
+  const grid = document.getElementById('grid');
+  if(!items.length){
+    grid.innerHTML = '<div class="empty">No verified problems found.</div>';
+    return;
+  }
+  grid.innerHTML = items.map((o,i) => {
+    const prize = prizeText(o.prize);
+    const domains = (o.domains||[]).slice(0,4).map(d=>`<span class="chip">${esc(d)}</span>`).join('');
+    return `<div class="card" onclick='openModal(${i})'>
+      <div class="badges">${statusBadge(o.status)}<span class="badge b-verified">✓ ${esc(o.verification_status||'')}</span></div>
+      <h3>${esc(o.title)}</h3>
+      <div class="org">${esc(o.organization?.name || 'Unknown organization')}</div>
+      <div class="chips">${domains}</div>
+      <div class="meta">
+        <span><b>Deadline:</b> ${o.deadline ? esc(o.deadline) : '<span class="nis">not specified</span>'}</span>
+        ${prize ? `<span><b>Prize:</b> ${esc(prize.length>40?prize.slice(0,40)+'…':prize)}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  window._items = items;
+}
+
+function openModal(i){
+  const o = window._items[i]; CURRENT = o;
+  document.getElementById('m-title').textContent = o.title;
+  const prize = prizeText(o.prize);
+  document.getElementById('m-badges').innerHTML =
+    statusBadge(o.status) + `<span class="badge b-verified">✓ ${esc(o.verification_status||'')}</span>` +
+    `<span class="chip">${esc(o.opportunity_type||'')}</span>`;
+  // details pane
+  const list = (arr) => (arr && arr.length) ? '<ul style="margin:4px 0 0;padding-left:18px">'+arr.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>' : '<span class="nis">Not specified in the source.</span>';
+  document.getElementById('pane-details').innerHTML = `
+    <div class="section"><h4>Problem Statement</h4><p>${esc(o.problem_statement)}</p></div>
+    <div class="kv">
+      <span class="k">Organization</span><span>${esc(o.organization?.name||'—')} ${o.organization?.level?`(${esc(o.organization.level)})`:''}</span>
+      <span class="k">Type</span><span>${esc(o.opportunity_type||'—')}${o.source_opportunity_type?` — "${esc(o.source_opportunity_type)}"`:''}</span>
+      <span class="k">Domains</span><span>${(o.domains||[]).map(esc).join(', ')||'—'}</span>
+      <span class="k">Geography</span><span>${esc(o.geography?.country||'—')}</span>
+      <span class="k">Deadline</span><span>${o.deadline?esc(o.deadline):'<span class="nis">Not specified in the source.</span>'}</span>
+      <span class="k">Prize / Funding</span><span>${prize?esc(prize):'<span class="nis">Not specified in the source.</span>'}</span>
+      <span class="k">Support</span><span>${o.support?esc(o.support):'<span class="nis">Not specified in the source.</span>'}</span>
+      <span class="k">Version</span><span>v${esc(o.version)}</span>
+    </div>
+    <div class="section"><h4>Eligibility</h4>${list(o.eligibility)}</div>
+    <div class="section"><h4>Requirements</h4>${list(o.requirements)}</div>
+    <div class="section"><h4>Constraints</h4>${list(o.constraints)}</div>
+    <div class="section"><h4>Expected Outcome</h4>${o.expected_outcome?`<p>${esc(o.expected_outcome)}</p>`:'<span class="nis">Not specified in the source.</span>'}</div>
+  `;
+  // source pane
+  const s = o.source || {};
+  document.getElementById('pane-source').innerHTML = `
+    <div class="section"><h4>Authoritative Source</h4>
+      <div class="src-box">
+        <div><b>URL:</b> <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url)}</a></div>
+        <div style="margin-top:6px"><b>Domain:</b> ${esc(s.source_domain||'—')}</div>
+        <div style="margin-top:6px"><b>Issuing org:</b> ${esc(s.issuing_organization||'—')}</div>
+        <div style="margin-top:6px"><b>Content hash (SHA-256):</b> ${esc(s.source_hash||'—')}</div>
+      </div>
+    </div>
+    <div class="section"><h4>Source Evidence</h4>
+      ${(o.source_evidence||[]).length ? (o.source_evidence).map(e=>`<div class="src-box" style="margin-bottom:8px"><b>${esc(e.field_name)}:</b> "${esc(e.excerpt)}"</div>`).join('') : '<span class="nis">No evidence excerpts recorded.</span>'}
+    </div>`;
+  document.getElementById('pane-history').innerHTML = '<div class="nis">Load the History tab to view version diffs.</div>';
+  document.getElementById('pane-explain').innerHTML = '<div class="nis">Click "Explain Problem" to generate a source-grounded explanation.</div>';
+  switchTab('details');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+function switchTab(name){
+  ['details','explain','history','source'].forEach(t=>{
+    document.getElementById('pane-'+t).style.display = (t===name)?'block':'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===name);
+  });
+  if(name==='explain') loadExplain();
+  if(name==='history') loadHistory();
+}
+
+async function loadExplain(){
+  if(!CURRENT) return;
+  const pane = document.getElementById('pane-explain');
+  if(explainCache[CURRENT.id]){ renderExplain(explainCache[CURRENT.id]); return; }
+  pane.innerHTML = '<div class="nis"><span class="spinner"></span> Generating source-grounded explanation…</div>';
+  try {
+    const r = await fetch(`${API}/api/opportunities/${encodeURIComponent(CURRENT.id)}/explain`, {method:'POST'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    explainCache[CURRENT.id] = data;
+    renderExplain(data);
+  } catch(e){
+    pane.innerHTML = `<span style="color:var(--red)">Explain failed: ${esc(e.message)}</span>`;
+  }
+}
+function renderExplain(d){
+  const li = (arr) => (arr&&arr.length) ? '<ul style="margin:4px 0 0;padding-left:18px">'+arr.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>' : '<span class="nis">Not specified in the source.</span>';
+  const sec = (t,v) => `<div class="section"><h4>${t}</h4>${v && String(v).trim() ? `<p>${esc(v)}</p>` : '<span class="nis">Not specified in the source.</span>'}</div>`;
+  document.getElementById('pane-explain').innerHTML = `
+    ${d.critic_approved?'<div class="critic">✓ Citation critic approved — all claims verified against source grounding.</div>':''}
+    ${sec('1. Problem', d.problem)}
+    ${sec('2. Why it matters', d.why_it_matters)}
+    ${sec('3. Who is affected', d.who_is_affected)}
+    ${sec('4. What the organization wants', d.what_org_wants)}
+    <div class="section"><h4>5. Key requirements</h4>${li(d.key_requirements)}</div>
+    <div class="section"><h4>6. Constraints</h4>${li(d.constraints)}</div>
+    ${sec('7. Funding / prize', d.funding_prize)}
+    ${sec('8. Support', d.support)}
+    ${sec('9. Deadline', d.deadline)}
+    <div class="section"><h4>10. Eligibility</h4>${li(d.eligibility)}</div>
+    ${sec('11. Expected outcome', d.expected_outcome)}
+    ${sec('12. Source citation', d.source_citation)}
+  `;
+}
+
+async function loadHistory(){
+  if(!CURRENT) return;
+  const pane = document.getElementById('pane-history');
+  pane.innerHTML = '<div class="nis"><span class="spinner"></span> Loading version history…</div>';
+  try {
+    const r = await fetch(`${API}/api/opportunities/${encodeURIComponent(CURRENT.id)}/history`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const versions = await r.json();
+    if(!versions.length){ pane.innerHTML='<span class="nis">No version history.</span>'; return; }
+    pane.innerHTML = versions.map(v=>`
+      <div class="src-box" style="margin-bottom:8px">
+        <b>Version ${esc(v.version_number ?? v.version ?? '?')}</b>
+        ${v.changed_at?` <span class="nis">· ${esc(v.changed_at)}</span>`:''}
+        ${v.change_summary?`<div style="margin-top:5px">${esc(v.change_summary)}</div>`:''}
+        ${Array.isArray(v.changed_fields)&&v.changed_fields.length?`<div style="margin-top:5px"><b>Changed:</b> ${v.changed_fields.map(esc).join(', ')}</div>`:''}
+      </div>`).join('');
+  } catch(e){
+    pane.innerHTML = `<span style="color:var(--red)">History failed: ${esc(e.message)}</span>`;
+  }
+}
+
+async function runDiscovery(){
+  const btn=document.getElementById('discoverBtn'); btn.disabled=true;
+  const bar=document.getElementById('statusbar');
+  bar.innerHTML='<span class="spinner"></span> Running discovery graph (live crawl → verify → extract → store)… this can take up to a minute.';
+  try {
+    const r = await fetch(`${API}/api/discovery/run`, {method:'POST'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    toast(`Discovery: ${d.candidates_discovered} candidates → ${d.verified_opportunities_saved} verified & saved.`);
+    await loadList();
+  } catch(e){ bar.innerHTML=`<span style="color:var(--red)">Discovery failed: ${esc(e.message)}</span>`; }
+  finally { btn.disabled=false; }
+}
+async function runMonitoring(){
+  const btn=document.getElementById('monitorBtn'); btn.disabled=true;
+  try {
+    const r = await fetch(`${API}/api/monitoring/run`, {method:'POST'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    toast(`Monitoring: checked ${d.checked_count}, updated ${d.updated_count}, expired ${d.expired_count}.`);
+    await loadList();
+  } catch(e){ toast('Monitoring failed: '+e.message); }
+  finally { btn.disabled=false; }
+}
+
+document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') loadList(); });
+document.getElementById('domain').addEventListener('keydown', e=>{ if(e.key==='Enter') loadList(); });
+loadList();
+</script>
+</body>
+</html>

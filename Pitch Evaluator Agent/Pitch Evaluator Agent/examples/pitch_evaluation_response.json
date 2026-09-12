@@ -1,0 +1,669 @@
+{
+  "pitch_evaluation_id": "eval_ada268028d2a",
+  "pitch_id": "pitch_demo_synthetic_001",
+  "startup_id": "startup_demo_govprocure",
+  "problem_statement_id": "prob_municipal_procure_2026",
+  "criterion_scores": {
+    "Business/Sustainability": 60,
+    "Competitive Differentiation": 40,
+    "Cost": 60,
+    "Feasibility": 60,
+    "Government Fit": 70,
+    "Implementation Readiness": 60,
+    "Innovation": 60,
+    "Market Validation": 60,
+    "Practicality": 60,
+    "Problem Validation": 70,
+    "Scalability": 60,
+    "Solution Fit": 60,
+    "Team Capability": 50,
+    "Technical Feasibility": 60
+  },
+  "weighted_total": 62,
+  "evidence_citations": [
+    {
+      "claim": "Startup addresses business/sustainability with relevant content",
+      "criterion": "Business/Sustainability",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_3",
+          "source_modality": "text",
+          "start_ref": 326,
+          "end_ref": 543,
+          "excerpt": "Scalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions wit"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: economics, unit"
+    },
+    {
+      "claim": "Startup addresses business/sustainability with relevant content",
+      "criterion": "Business/Sustainability",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_5",
+          "source_modality": "text",
+          "start_ref": 765,
+          "end_ref": 979,
+          "excerpt": "Cost: Total cost of ownership analysis demonstrates annual budget fit through a tiered subscription pricing model, delivering a 35% reduction in administrative overhead and a favorable unit economics "
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.8,
+      "notes": "Mock extraction based on keyword match: economics, unit, model"
+    },
+    {
+      "claim": "Startup addresses cost with relevant content",
+      "criterion": "Cost",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_3",
+          "source_modality": "text",
+          "start_ref": 326,
+          "end_ref": 543,
+          "excerpt": "Scalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions wit"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: economics, unit"
+    },
+    {
+      "claim": "Startup addresses cost with relevant content",
+      "criterion": "Cost",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_5",
+          "source_modality": "text",
+          "start_ref": 765,
+          "end_ref": 979,
+          "excerpt": "Cost: Total cost of ownership analysis demonstrates annual budget fit through a tiered subscription pricing model, delivering a 35% reduction in administrative overhead and a favorable unit economics "
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: budget, economics, pricing, unit, model, cost, breakdown"
+    },
+    {
+      "claim": "Startup addresses feasibility with relevant content",
+      "criterion": "Feasibility",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: prototypes, technical, approach, feasibility"
+    },
+    {
+      "claim": "Startup addresses feasibility with relevant content",
+      "criterion": "Feasibility",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_7",
+          "source_modality": "text",
+          "start_ref": 1175,
+          "end_ref": 1360,
+          "excerpt": "Team Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: team"
+    },
+    {
+      "claim": "Startup addresses government fit with relevant content",
+      "criterion": "Government Fit",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_2",
+          "source_modality": "text",
+          "start_ref": 44,
+          "end_ref": 325,
+          "excerpt": "Problem Validation: We conducted user research with 45 public procurement officers across municipal jurisdictions, quantifying that manual RFQ processing incurs 120 hours of administrative delay per t"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: procurement, compliance"
+    },
+    {
+      "claim": "Startup addresses government fit with relevant content",
+      "criterion": "Government Fit",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_6",
+          "source_modality": "text",
+          "start_ref": 980,
+          "end_ref": 1174,
+          "excerpt": "Government Fit: Fully aligned with public procurement regulations, adhering to SOC2 security standards and data protection compliance certifications required for municipal procurement workflows."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: government, certifications, standards, security, procurement, compliance"
+    },
+    {
+      "claim": "Startup addresses government fit with relevant content",
+      "criterion": "Government Fit",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_7",
+          "source_modality": "text",
+          "start_ref": 1175,
+          "end_ref": 1360,
+          "excerpt": "Team Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: experience"
+    },
+    {
+      "claim": "Startup addresses implementation readiness with relevant content",
+      "criterion": "Implementation Readiness",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_3",
+          "source_modality": "text",
+          "start_ref": 326,
+          "end_ref": 543,
+          "excerpt": "Scalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions wit"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: readiness"
+    },
+    {
+      "claim": "Startup addresses implementation readiness with relevant content",
+      "criterion": "Implementation Readiness",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_7",
+          "source_modality": "text",
+          "start_ref": 1175,
+          "end_ref": 1360,
+          "excerpt": "Team Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: plan, team"
+    },
+    {
+      "claim": "Startup addresses innovation with relevant content",
+      "criterion": "Innovation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: technical"
+    },
+    {
+      "claim": "Startup addresses innovation with relevant content",
+      "criterion": "Innovation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_5",
+          "source_modality": "text",
+          "start_ref": 765,
+          "end_ref": 979,
+          "excerpt": "Cost: Total cost of ownership analysis demonstrates annual budget fit through a tiered subscription pricing model, delivering a 35% reduction in administrative overhead and a favorable unit economics "
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: model"
+    },
+    {
+      "claim": "Startup addresses market validation with relevant content",
+      "criterion": "Market Validation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_2",
+          "source_modality": "text",
+          "start_ref": 44,
+          "end_ref": 325,
+          "excerpt": "Problem Validation: We conducted user research with 45 public procurement officers across municipal jurisdictions, quantifying that manual RFQ processing incurs 120 hours of administrative delay per t"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: user, validation"
+    },
+    {
+      "claim": "Startup addresses market validation with relevant content",
+      "criterion": "Market Validation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: validation"
+    },
+    {
+      "claim": "Startup addresses practicality with relevant content",
+      "criterion": "Practicality",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_2",
+          "source_modality": "text",
+          "start_ref": 44,
+          "end_ref": 325,
+          "excerpt": "Problem Validation: We conducted user research with 45 public procurement officers across municipal jurisdictions, quantifying that manual RFQ processing incurs 120 hours of administrative delay per t"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: compliance"
+    },
+    {
+      "claim": "Startup addresses practicality with relevant content",
+      "criterion": "Practicality",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_6",
+          "source_modality": "text",
+          "start_ref": 980,
+          "end_ref": 1174,
+          "excerpt": "Government Fit: Fully aligned with public procurement regulations, adhering to SOC2 security standards and data protection compliance certifications required for municipal procurement workflows."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: compliance"
+    },
+    {
+      "claim": "Startup addresses problem validation with relevant content",
+      "criterion": "Problem Validation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_2",
+          "source_modality": "text",
+          "start_ref": 44,
+          "end_ref": 325,
+          "excerpt": "Problem Validation: We conducted user research with 45 public procurement officers across municipal jurisdictions, quantifying that manual RFQ processing incurs 120 hours of administrative delay per t"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: point, user, research, pain, problem, validation"
+    },
+    {
+      "claim": "Startup addresses problem validation with relevant content",
+      "criterion": "Problem Validation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: validation"
+    },
+    {
+      "claim": "Startup addresses problem validation with relevant content",
+      "criterion": "Problem Validation",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_6",
+          "source_modality": "text",
+          "start_ref": 980,
+          "end_ref": 1174,
+          "excerpt": "Government Fit: Fully aligned with public procurement regulations, adhering to SOC2 security standards and data protection compliance certifications required for municipal procurement workflows."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: data"
+    },
+    {
+      "claim": "Startup addresses scalability with relevant content",
+      "criterion": "Scalability",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_3",
+          "source_modality": "text",
+          "start_ref": 326,
+          "end_ref": 543,
+          "excerpt": "Scalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions wit"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: economics, readiness, scaling, unit, scale, architecture, cloud, scalability"
+    },
+    {
+      "claim": "Startup addresses scalability with relevant content",
+      "criterion": "Scalability",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_5",
+          "source_modality": "text",
+          "start_ref": 765,
+          "end_ref": 979,
+          "excerpt": "Cost: Total cost of ownership analysis demonstrates annual budget fit through a tiered subscription pricing model, delivering a 35% reduction in administrative overhead and a favorable unit economics "
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.7,
+      "notes": "Mock extraction based on keyword match: economics, unit"
+    },
+    {
+      "claim": "Startup addresses solution fit with relevant content",
+      "criterion": "Solution Fit",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: mapping"
+    },
+    {
+      "claim": "Startup addresses solution fit with relevant content",
+      "criterion": "Solution Fit",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_7",
+          "source_modality": "text",
+          "start_ref": 1175,
+          "end_ref": 1360,
+          "excerpt": "Team Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: capability"
+    },
+    {
+      "claim": "Startup addresses team capability with relevant content",
+      "criterion": "Team Capability",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_7",
+          "source_modality": "text",
+          "start_ref": 1175,
+          "end_ref": 1360,
+          "excerpt": "Team Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record."
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: record, background, capability, founder, team, plan, hiring, execution, track, experience"
+    },
+    {
+      "claim": "Startup addresses technical feasibility with relevant content",
+      "criterion": "Technical Feasibility",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_3",
+          "source_modality": "text",
+          "start_ref": 326,
+          "end_ref": 543,
+          "excerpt": "Scalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions wit"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.6,
+      "notes": "Mock extraction based on keyword match: architecture"
+    },
+    {
+      "claim": "Startup addresses technical feasibility with relevant content",
+      "criterion": "Technical Feasibility",
+      "source_segments": [
+        {
+          "segment_id": "text_seg_4",
+          "source_modality": "text",
+          "start_ref": 544,
+          "end_ref": 764,
+          "excerpt": "Feasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear"
+        }
+      ],
+      "evidence_type": "direct_quote",
+      "verification_level": "self_reported",
+      "confidence": 0.9,
+      "notes": "Mock extraction based on keyword match: proof, technical, feasibility, debt"
+    }
+  ],
+  "strengths": [
+    "Adequate evidence for Business/Sustainability",
+    "Adequate evidence for Cost",
+    "Adequate evidence for Feasibility",
+    "Adequate evidence for Government Fit",
+    "Adequate evidence for Implementation Readiness",
+    "Adequate evidence for Innovation",
+    "Adequate evidence for Market Validation",
+    "Adequate evidence for Practicality",
+    "Adequate evidence for Problem Validation",
+    "Adequate evidence for Scalability",
+    "Adequate evidence for Solution Fit",
+    "Adequate evidence for Technical Feasibility"
+  ],
+  "weaknesses": [
+    "Could benefit from more comprehensive evidence",
+    "Insufficient evidence for Competitive Differentiation",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Could benefit from more comprehensive evidence",
+    "Insufficient evidence for Team Capability",
+    "Could benefit from more comprehensive evidence"
+  ],
+  "missing_information": [
+    "Additional supporting documentation would strengthen the case",
+    "Need more documentation and data points for Competitive Differentiation",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Additional supporting documentation would strengthen the case",
+    "Need more documentation and data points for Team Capability",
+    "Additional supporting documentation would strengthen the case"
+  ],
+  "uncertainties": [
+    "Limited scope of available evidence",
+    "High uncertainty due to limited evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "Limited scope of available evidence",
+    "High uncertainty due to limited evidence",
+    "Limited scope of available evidence"
+  ],
+  "risk_signals": {
+    "technical_risk_indicators": [],
+    "regulatory_risk_indicators": [],
+    "team_risk_indicators": [
+      "team",
+      "capability"
+    ],
+    "market_risk_indicators": [],
+    "financial_risk_indicators": []
+  },
+  "confidence": 0.5157142857142858,
+  "evidence_quality": 0.512,
+  "metadata": {
+    "criteria_config_version": "1.0",
+    "evaluator_version": "0.1.0",
+    "processed_at": "2026-09-11T20:33:54.784735Z",
+    "source_modality": "text",
+    "processing_time_ms": 1,
+    "llm_model": null,
+    "criteria_used": [
+      "Business/Sustainability",
+      "Competitive Differentiation",
+      "Cost",
+      "Feasibility",
+      "Government Fit",
+      "Implementation Readiness",
+      "Innovation",
+      "Market Validation",
+      "Practicality",
+      "Problem Validation",
+      "Scalability",
+      "Solution Fit",
+      "Team Capability",
+      "Technical Feasibility"
+    ]
+  },
+  "calculation_audit": [
+    {
+      "criterion": "Business/Sustainability",
+      "raw_score": 60,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.2857142857142858
+    },
+    {
+      "criterion": "Competitive Differentiation",
+      "raw_score": 40,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 0.8571428571428572
+    },
+    {
+      "criterion": "Cost",
+      "raw_score": 60,
+      "weight": 0.15,
+      "weighted_contribution": 9.0
+    },
+    {
+      "criterion": "Feasibility",
+      "raw_score": 60,
+      "weight": 0.15,
+      "weighted_contribution": 9.0
+    },
+    {
+      "criterion": "Government Fit",
+      "raw_score": 70,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.5
+    },
+    {
+      "criterion": "Implementation Readiness",
+      "raw_score": 60,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.2857142857142858
+    },
+    {
+      "criterion": "Innovation",
+      "raw_score": 60,
+      "weight": 0.05,
+      "weighted_contribution": 3.0
+    },
+    {
+      "criterion": "Market Validation",
+      "raw_score": 60,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.2857142857142858
+    },
+    {
+      "criterion": "Practicality",
+      "raw_score": 60,
+      "weight": 0.1,
+      "weighted_contribution": 6.0
+    },
+    {
+      "criterion": "Problem Validation",
+      "raw_score": 70,
+      "weight": 0.2,
+      "weighted_contribution": 14.0
+    },
+    {
+      "criterion": "Scalability",
+      "raw_score": 60,
+      "weight": 0.15,
+      "weighted_contribution": 9.0
+    },
+    {
+      "criterion": "Solution Fit",
+      "raw_score": 60,
+      "weight": 0.05,
+      "weighted_contribution": 3.0
+    },
+    {
+      "criterion": "Team Capability",
+      "raw_score": 50,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.0714285714285714
+    },
+    {
+      "criterion": "Technical Feasibility",
+      "raw_score": 60,
+      "weight": 0.02142857142857143,
+      "weighted_contribution": 1.2857142857142858
+    }
+  ],
+  "_comment": "SYNTHETIC DEMO RESPONSE: Generated from deterministic evaluation of synthetic pitch content."
+}

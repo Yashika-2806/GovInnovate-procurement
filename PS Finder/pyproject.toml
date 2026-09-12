@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "problem-discovery-agent"
+version = "0.1.0"
+description = "Verified Problem & Challenge Discovery Agent for ALPHA SIH Multi-Agent Platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langchain-groq>=0.2.0",
+    "langchain-google-genai>=2.0.0",
+    "langchain-openai>=0.2.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.8.0",
+    "pydantic-settings>=2.4.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.13.0",
+    "psycopg2-binary>=2.9.9",
+    "pgvector>=0.3.0",
+    "chromadb>=0.5.0",
+    "httpx>=0.27.0",
+    "beautifulsoup4>=4.12.0",
+    "pymupdf>=1.24.0",
+    "apscheduler>=3.10.4",
+    "python-dotenv>=1.0.1"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "playwright>=1.46.0"
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]

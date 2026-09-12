@@ -1,0 +1,13 @@
+# Milestone Evaluator & Distributor Agent — runtime dependencies.
+#
+# This agent is RULE-BASED: the LangGraph nodes score submitted evidence
+# deterministically (commit/CI/coverage for software; telemetry/geolocation for
+# hardware). It makes NO LLM calls and needs NO API key.
+#
+# Run from the "evaluator agent/" directory (so the `backend` package resolves):
+#     uvicorn backend.server:app --host 127.0.0.1 --port 8003
+langgraph>=0.2.0
+langchain-core>=0.3.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.8.0

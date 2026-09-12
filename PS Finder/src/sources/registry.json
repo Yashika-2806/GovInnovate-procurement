@@ -1,0 +1,26 @@
+[
+  {
+    "source_id": "startup_india_portal",
+    "name": "Startup India Innovation Challenges",
+    "organization": "Department for Promotion of Industry and Internal Trade (DPIIT), Ministry of Commerce & Industry",
+    "organization_type": "government",
+    "country": "IN",
+    "authority_level": "official",
+    "base_url": "https://www.startupindia.gov.in/content/sih/en/cms-page/challenge.html",
+    "enabled": true,
+    "adapter": "StartupIndiaAdapter",
+    "discovery_frequency": "daily"
+  },
+  {
+    "source_id": "mygov_innovate_portal",
+    "name": "MyGov Innovate / MeitY Innovation Challenges",
+    "organization": "MyGov India, Ministry of Electronics and Information Technology (MeitY)",
+    "organization_type": "government",
+    "country": "IN",
+    "authority_level": "official",
+    "base_url": "https://innovateindia.mygov.in/",
+    "enabled": true,
+    "adapter": "MyGovAdapter",
+    "discovery_frequency": "daily"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "_comment": "SYNTHETIC DEMO CONTRACT: Synthetic test data for integration reference. No real entities represented.",
+  "pitch_id": "pitch_demo_synthetic_001",
+  "startup_id": "startup_demo_govprocure",
+  "problem_statement_id": "prob_municipal_procure_2026",
+  "pitch_content": "Synthetic Test Pitch: GovProcure Assistant.\n\nProblem Validation: We conducted user research with 45 public procurement officers across municipal jurisdictions, quantifying that manual RFQ processing incurs 120 hours of administrative delay per tender, with 68% citing compliance errors as their primary operational pain point.\n\nScalability: Cloud readiness architecture deployed on containerized microservices with horizontal auto-scaling, supporting automated unit economics at scale up to 10,000 concurrent bid submissions without degradation.\n\nFeasibility: Technical approach utilizes modular REST APIs and an open-source workflow engine; proof-of-concept prototypes have completed architectural validation with minimal technical debt and clear dependency mapping.\n\nCost: Total cost of ownership analysis demonstrates annual budget fit through a tiered subscription pricing model, delivering a 35% reduction in administrative overhead and a favorable unit economics ROI breakdown.\n\nGovernment Fit: Fully aligned with public procurement regulations, adhering to SOC2 security standards and data protection compliance certifications required for municipal procurement workflows.\n\nTeam Capability: Founder background and engineering team experience include 15 years in enterprise civic-tech systems, with an established hiring plan and strong execution track record.",
+  "file_path": null,
+  "evaluation_config": null,
+  "context": {
+    "procurement_tier": "municipal",
+    "target_jurisdiction": "synthetic_region_01",
+    "evaluation_round": "preliminary_screening"
+  }
+}

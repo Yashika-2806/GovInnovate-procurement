@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./.venv/Scripts/python.exe --version)",
+      "Bash(./.venv/Scripts/python.exe -m pip list)",
+      "Bash(./.venv/Scripts/python.exe -c ' *)",
+      "Bash(./.venv/Scripts/python.exe -m pytest -q --no-header)",
+      "Bash(./.venv/Scripts/python.exe -c \"import langchain_groq, langchain, langgraph, chromadb; print\\('groq', langchain_groq.__version__ if hasattr\\(langchain_groq,'__version__'\\) else '?'\\); print\\('langchain', langchain.__version__\\); print\\('chromadb', chromadb.__version__\\)\")",
+      "Bash(rm -f data/ps_finder.db)",
+      "Bash(rm -rf data/chroma)",
+      "Bash(PYTHONUTF8=1 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python.exe -c ' *)",
+      "Bash(PYTHONUTF8=1 PYTHONIOENCODING=utf-8 ./.venv/Scripts/python.exe -m pytest -x -q)"
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+version: "1.0"
+
+criteria:
+  # Core criteria (mandatory, always enabled)
+  - name: "Problem Validation"
+    weight: 0.20
+    enabled: true
+    description: "How well does the startup validate the problem exists, is significant, and is worth solving?"
+    evidence_guidance: "Look for problem quantification, user research, stakeholder interviews, market data, pain point evidence"
+
+  - name: "Scalability"
+    weight: 0.15
+    enabled: true
+    description: "Can the solution scale to serve the target population/government scale?"
+    evidence_guidance: "Architecture, cloud readiness, automation, unit economics at scale, scaling strategy"
+
+  - name: "Feasibility"
+    weight: 0.15
+    enabled: true
+    description: "Technical and operational feasibility within constraints"
+    evidence_guidance: "Technical approach, team skills, timeline, dependencies, prototypes, risk mitigation"
+
+  - name: "Cost"
+    weight: 0.15
+    enabled: true
+    description: "Cost-effectiveness and budget alignment"
+    evidence_guidance: "Pricing model, TCO, ROI, budget fit, cost breakdown, unit economics"
+
+  - name: "Practicality"
+    weight: 0.10
+    enabled: true
+    description: "Practical implementation considerations for government context"
+    evidence_guidance: "Deployment complexity, integration needs, change management, compliance, maintenance"
+
+  # Additional criteria with specified example weights
+  - name: "Solution Fit"
+    weight: 0.05
+    enabled: true
+    description: "Alignment between solution and problem requirements"
+    evidence_guidance: "Requirements coverage, feature-problem mapping, customization capability"
+
+  - name: "Innovation"
+    weight: 0.05
+    enabled: true
+    description: "Novelty and differentiation of approach"
+    evidence_guidance: "Technical novelty, business model innovation, IP, competitive differentiation"
+
+  # Additional criteria - remaining weight distributed equally (0.15 / 8 = 0.01875 each)
+  - name: "Technical Feasibility"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Technical soundness and engineering viability"
+    evidence_guidance: "Architecture decisions, technology choices, proof of concepts, technical debt"
+
+  - name: "Market Validation"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Evidence of market demand and customer traction"
+    evidence_guidance: "Customer interviews, pilots, LOIs, revenue, user metrics, retention"
+
+  - name: "Team Capability"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Team's ability to execute the proposed solution"
+    evidence_guidance: "Founder background, team experience, advisors, hiring plan, execution track record"
+
+  - name: "Implementation Readiness"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Readiness to begin implementation immediately"
+    evidence_guidance: "Project plan, resources secured, regulatory clearance, team availability"
+
+  - name: "Government Fit"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Alignment with government procurement processes and requirements"
+    evidence_guidance: "Compliance certifications, security standards, procurement experience, references"
+
+  - name: "Business/Sustainability"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Long-term business viability and sustainability"
+    evidence_guidance: "Business model, funding, runway, revenue path, unit economics, go-to-market"
+
+  - name: "Competitive Differentiation"
+    weight: 0.02142857142857143
+    enabled: true
+    description: "Sustainable competitive advantage"
+    evidence_guidance: "Moats, IP, network effects, switching costs, unique capabilities"
+
+  - name: "Evidence Quality"
+    weight: 0.0
+    enabled: false
+    description: "Quality and richness of evidence provided in the pitch (reported separately, not weighted)"
+    evidence_guidance: "Citation count, verification levels, modality diversity, source recency"
