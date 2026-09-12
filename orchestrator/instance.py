@@ -206,7 +206,7 @@ class WorkflowInstance:
             ProcurementState.REMEDIATION: [ProcurementState.EVIDENCE_SUBMITTED],
             ProcurementState.NEXT_MILESTONE: [ProcurementState.MILESTONE_ACTIVE, ProcurementState.EVIDENCE_SUBMITTED],
             ProcurementState.FINAL_EVALUATION: [ProcurementState.PERFORMANCE_UPDATED],
-            ProcurementState.PERFORMANCE_UPDATED: [ProcurementState.SCALE_RECOMMENDATION],
+            ProcurementState.PERFORMANCE_UPDATED: [ProcurementState.SCALE_RECOMMENDATION, ProcurementState.AWAITING_FINAL_DECISION],
             ProcurementState.SCALE_RECOMMENDATION: [ProcurementState.AWAITING_FINAL_DECISION, ProcurementState.HUMAN_FINAL_DECISION, ProcurementState.COMPLETED],
             ProcurementState.AWAITING_FINAL_DECISION: [ProcurementState.HUMAN_FINAL_DECISION],
             ProcurementState.HUMAN_FINAL_DECISION: [ProcurementState.COMPLETED, ProcurementState.FAILED],
