@@ -1,0 +1,22 @@
+from enum import Enum, auto
+
+class ProcurementState(Enum):
+    OPPORTUNITY_DISCOVERED = auto()
+    PITCH_SUBMITTED = auto()
+    PITCH_EVALUATED = auto()
+    RISK_ASSESSED = auto()
+    AWAITING_HUMAN_REVIEW = auto()
+    STARTUP_SELECTED = auto()
+    PROBLEM_ALLOCATED = auto()
+    PILOT_CREATED = auto()
+    MILESTONE_ACTIVE = auto()
+    EVIDENCE_SUBMITTED = auto()
+    MILESTONE_EVALUATED = auto()
+    NEXT_MILESTONE = auto()
+    REMEDIATION = auto()
+    FINAL_EVALUATION = auto()
+    PERFORMANCE_UPDATED = auto()
+    SCALE_RECOMMENDATION = auto()
+    AWAITING_FINAL_DECISION = auto()
+    HUMAN_FINAL_DECISION = auto()
+    FAILED = auto()
