@@ -1,26 +1,33 @@
+import { Layout } from './layouts/Layout';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-
-// API Client
-const apiClient = {
-  createWorkflow: (opp: any) => axios.post(`${API_BASE}/api/workflows`, opp),
-  getWorkflow: (id: string) => axios.get(`${API_BASE}/api/workflows/${id}`),
-  submitPitch: (id: string, pitch: any) => axios.post(`${API_BASE}/api/workflows/${id}/pitch`, pitch),
-  evaluatePitch: (id: string) => axios.post(`${API_BASE}/api/workflows/${id}/pitch/evaluate`),
-  assessRisk: (id: string) => axios.post(`${API_BASE}/api/workflows/${id}/risk/assess`),
-};
+import { workflowsApi, Workflow } from './api/workflows';
 
 function App() {
   const [status, setStatus] = useState<string>('Connecting...');
   const [workflowId, setWorkflowId] = useState<string | null>(null);
+  const [workflow, setWorkflow] = useState<Workflow | null>(null);
 
   useEffect(() => {
-    axios.get(`${API_BASE}/health`)
-      .then(res => setStatus('Backend Online'))
-      .catch(err => setStatus('Backend Offline'));
+    checkHealth();
   }, []);
+
+  const checkHealth = async () => {
+    try {
+      await workflowsApi.getHealth();
+      setStatus('Backend Online');
+    } catch {
+      setStatus('Backend Offline');
+    }
+  };
+
+  const refreshWorkflow = async (id: string) => {
+    try {
+      const res = await workflowsApi.get(id);
+      setWorkflow(res.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const startWorkflow = async () => {
     const opp = {
@@ -30,26 +37,54 @@ function App() {
       organization: "GovTest",
       status: "active"
     };
-    const res = await apiClient.createWorkflow(opp);
+    const res = await workflowsApi.create(opp);
     setWorkflowId(res.data.workflow_id);
+    refreshWorkflow(res.data.workflow_id);
+  };
+
+  const handleAction = async (action: () => Promise<any>) => {
+    await action();
+    if (workflowId) {
+        refreshWorkflow(workflowId);
+    }
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>GovInnovate Procurement</h1>
+    <Layout>
+      <h1>Dashboard</h1>
       <p>System Status: <strong>{status}</strong></p>
 
-      <button onClick={startWorkflow}>Start Workflow</button>
+      {!workflowId && (
+        <button onClick={startWorkflow}>Start Workflow</button>
+      )}
 
-      {workflowId && (
+      {workflow && (
         <div>
-          <p>Workflow Created: <strong>{workflowId}</strong></p>
-          <button onClick={() => apiClient.submitPitch(workflowId, {pitch_id: 'p1', startup_id: 's1', opportunity_id: 'o1'})}>
-            Submit Pitch
-          </button>
+          <h2>Workflow: {workflow.workflow_id}</h2>
+          <p>State: <strong>{workflow.state}</strong></p>
+
+          <div style={{ marginTop: '10px' }}>
+            {workflow.state === 'OPPORTUNITY_DISCOVERED' && (
+              <button onClick={() => handleAction(() => workflowsApi.submitPitch(workflow.workflow_id, {pitch_id: 'p1', startup_id: 's1', opportunity_id: 'o1'}))}>
+                Submit Pitch
+              </button>
+            )}
+
+            {workflow.state === 'PITCH_SUBMITTED' && (
+              <button onClick={() => handleAction(() => workflowsApi.evaluatePitch(workflow.workflow_id))}>
+                Evaluate Pitch
+              </button>
+            )}
+
+            {workflow.state === 'PITCH_EVALUATED' && (
+              <button onClick={() => handleAction(() => workflowsApi.assessRisk(workflow.workflow_id))}>
+                Assess Risk
+              </button>
+            )}
+          </div>
         </div>
       )}
-    </div>
+    </Layout>
   );
 }
 
