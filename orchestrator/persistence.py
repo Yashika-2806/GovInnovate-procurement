@@ -1,7 +1,5 @@
-from sqlalchemy import create_engine, Column, String, JSON, DateTime, Boolean
+from sqlalchemy import create_engine, Column, String, JSON
 from sqlalchemy.orm import sessionmaker, declarative_base
-from datetime import datetime
-import uuid
 
 DATABASE_URL = "sqlite:///./procurement.db"
 engine = create_engine(DATABASE_URL)
@@ -12,7 +10,7 @@ class WorkflowModel(Base):
     __tablename__ = "workflows"
     workflow_id = Column(String, primary_key=True)
     state = Column(String)
-    context = Column(JSON)
+    context = Column(JSON) # Stores canonical models, evidence, etc
 
 class AuditModel(Base):
     __tablename__ = "audits"
