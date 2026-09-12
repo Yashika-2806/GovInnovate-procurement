@@ -16,7 +16,7 @@ const STAGE_DESCRIPTION: Record<string, string> = {
   FAILED: "Procurement process terminated.",
 };
 
-export const Dashboard = () => {
+export const Dashboard = ({ onSelectWorkflow }: { onSelectWorkflow?: (id: string) => void }) => {
   const [status, setStatus] = useState<string>('Connecting...');
   const [workflowId, setWorkflowId] = useState<string | null>(null);
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
@@ -68,6 +68,11 @@ export const Dashboard = () => {
         <div style={{ padding: '20px', border: '1px solid #ccc' }}>
           <h3>Create New Opportunity</h3>
           <button onClick={() => startWorkflow({title: "Drone Monitoring", description: "Efficient drone surveillance", organization: "GovTest", status: "active"})}>Start Workflow</button>
+        {workflowId && onSelectWorkflow && (
+          <button onClick={() => onSelectWorkflow(workflowId)} style={{ marginLeft: '10px' }}>
+            View Full Workflow Detail
+          </button>
+        )}
         </div>
       )}
 
