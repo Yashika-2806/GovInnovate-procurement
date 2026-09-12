@@ -9,7 +9,10 @@ const STAGE_DESCRIPTION: Record<string, string> = {
   PITCH_SUBMITTED: "Startup pitch proposal received.",
   PITCH_EVALUATED: "AI pitch evaluation completed.",
   RISK_ASSESSED: "AI risk assessment completed.",
+  AWAITING_HUMAN_REVIEW: "Awaiting human review of risk assessment.",
   STARTUP_SELECTED: "Startup selected by committee.",
+  AWAITING_FINAL_DECISION: "Awaiting final human procurement decision.",
+  MILESTONE_EVALUATED: "Milestone evaluation completed.",
   FAILED: "Procurement process terminated.",
 };
 
@@ -17,6 +20,7 @@ export const Dashboard = () => {
   const [status, setStatus] = useState<string>('Connecting...');
   const [workflowId, setWorkflowId] = useState<string | null>(null);
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
+  const [showFinalDecision, setShowFinalDecision] = useState(false);
 
   useEffect(() => {
     checkHealth();
@@ -40,14 +44,7 @@ export const Dashboard = () => {
     }
   };
 
-  const startWorkflow = async () => {
-    const opp = {
-      opportunity_id: `opp-${Math.random().toString(36).substring(7)}`,
-      title: "Test AI Drone",
-      description: "Test description",
-      organization: "GovTest",
-      status: "active"
-    };
+  const startWorkflow = async (opp: any) => {
     const res = await workflowsApi.create(opp);
     setWorkflowId(res.data.workflow_id);
     refreshWorkflow(res.data.workflow_id);
@@ -68,7 +65,10 @@ export const Dashboard = () => {
       </div>
 
       {!workflowId && (
-        <button onClick={startWorkflow}>Start New Procurement Workflow</button>
+        <div style={{ padding: '20px', border: '1px solid #ccc' }}>
+          <h3>Create New Opportunity</h3>
+          <button onClick={() => startWorkflow({title: "Drone Monitoring", description: "Efficient drone surveillance", organization: "GovTest", status: "active"})}>Start Workflow</button>
+        </div>
       )}
 
       {workflow && (
@@ -84,7 +84,7 @@ export const Dashboard = () => {
 
               <div style={{ marginTop: '20px' }}>
                 <h4>Actions</h4>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   {workflow.state === 'OPPORTUNITY_DISCOVERED' && (
                   <button onClick={() => handleAction(() => workflowsApi.submitPitch(workflow.workflow_id, {pitch_id: 'p1', startup_id: 's1', opportunity_id: 'o1'}))}>
                     Submit Pitch
@@ -108,18 +108,21 @@ export const Dashboard = () => {
                       Approve Startup
                    </button>
                 )}
-                </div>
-              </div>
 
-              <div style={{ marginTop: '20px', fontSize: '0.8em', color: '#666' }}>
-                <h4>Backend Blocked Functions</h4>
-                <ul>
-                    <li>Startup Selection</li>
-                    <li>Allocation</li>
-                    <li>Pilot Stages</li>
-                    <li>Milestone Management</li>
-                    <li>Evidence/Audit trails</li>
-                </ul>
+                {workflow.state === 'AWAITING_FINAL_DECISION' && (
+                   <button onClick={() => setShowFinalDecision(true)}>
+                      Make Final Decision
+                   </button>
+                )}
+                </div>
+
+                {showFinalDecision && (
+                  <div style={{ padding: '10px', border: '1px solid black', marginTop: '10px' }}>
+                      <h4>Make Final Decision</h4>
+                      <button onClick={() => handleAction(() => workflowsApi.submitFinalDecision(workflow.workflow_id, "APPROVE"))}>Approve Scale</button>
+                      <button onClick={() => setShowFinalDecision(false)}>Cancel</button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
