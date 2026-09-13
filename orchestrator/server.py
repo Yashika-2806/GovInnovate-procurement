@@ -40,7 +40,7 @@ def get_db():
 # Integration point: adapter wired at module level; future intake endpoint can call problem_collector.search_opportunities(query)
 problem_collector = ProblemCollectorAdapter("http://localhost:8001")
 pitch_evaluator = PitchEvaluatorAdapter("http://localhost:8001")
-risk_detector = RiskDetectorAdapter("http://localhost:8002")
+risk_detector = RiskDetectorAdapter("http://localhost:8000")
 evaluator = EvaluatorAdapter("http://localhost:8003")
 
 @app.get("/api/workflows/{workflow_id}/milestones", response_model=list)
