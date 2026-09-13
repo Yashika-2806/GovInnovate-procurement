@@ -46,12 +46,12 @@ async def test_complete_workflow():
         for port, (name, url) in services.items():
             try:
                 r = await client.get(url, timeout=2)
-                status = "✓ ALIVE" if r.status_code in [200, 404] else f"? {r.status_code}"
+                status = "OK" if r.status_code in [200, 404] else f"? {r.status_code}"
                 print(f"  [{status}] {name:20} port {port}")
                 if r.status_code in [200, 404]:
                     alive_count += 1
             except Exception as e:
-                print(f"  [✗ DEAD] {name:20} port {port} - {type(e).__name__}")
+                print(f"  [DEAD] {name:20} port {port} - {type(e).__name__}")
 
         print(f"\nServices alive: {alive_count}/5")
         print()
@@ -80,7 +80,7 @@ async def test_complete_workflow():
 
         wf = r.json()
         wf_id = wf["workflow_id"]
-        print(f"✓ Workflow created")
+        print(f"PASS Workflow created")
         print(f"  ID: {wf_id}")
         print(f"  State: {wf['state']}")
         print()
@@ -107,11 +107,11 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Pitch submitted")
+        print(f"PASS Pitch submitted")
         print()
 
         # STEP 4: Evaluate Pitch (PITCH_EVALUATED) - Real PitchEvaluatorAdapter
-        print("STEP 4: EVALUATE PITCH - Real PitchEvaluatorAdapter → localhost:8001")
+        print("STEP 4: EVALUATE PITCH - Real PitchEvaluatorAdapter -> localhost:8001")
         print("-" * 100)
 
         r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/pitch/evaluate")
@@ -121,13 +121,13 @@ async def test_complete_workflow():
             return False
 
         eval_resp = r.json()
-        print(f"✓ Pitch evaluated via adapter")
+        print(f"PASS Pitch evaluated via adapter")
         print(f"  Adapter: {eval_resp.get('adapter_called', 'unknown')}")
         print(f"  Service: {eval_resp.get('service_target', 'unknown')}")
         print()
 
         # STEP 5: Assess Risk (RISK_ASSESSED) - Real RiskDetectorAdapter
-        print("STEP 5: ASSESS RISK - Real RiskDetectorAdapter → localhost:8003")
+        print("STEP 5: ASSESS RISK - Real RiskDetectorAdapter -> localhost:8003")
         print("-" * 100)
         print("  (This will call Gemini API for real risk analysis)")
 
@@ -138,7 +138,7 @@ async def test_complete_workflow():
             return False
 
         risk_resp = r.json()
-        print(f"✓ Risk assessed via adapter")
+        print(f"PASS Risk assessed via adapter")
         print(f"  Adapter: {risk_resp.get('adapter_called', 'unknown')}")
         print(f"  Service: {risk_resp.get('service_target', 'unknown')}")
         print(f"  Fabricated: {risk_resp.get('fabricated_result', 'unknown')}")
@@ -148,13 +148,13 @@ async def test_complete_workflow():
         print("STEP 6: HUMAN REVIEW GATE - AWAITING_HUMAN_REVIEW")
         print("-" * 100)
 
-        r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/human-review", json={"decision": "APPROVE"})
+        r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/human-review?decision=APPROVE")
         if r.status_code != 200:
             print(f"ERROR: Human review failed - {r.status_code}")
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Human approved (APPROVE)")
+        print(f"PASS Human approved (APPROVE)")
         print()
 
         # STEP 7: Select Startup (STARTUP_SELECTED)
@@ -163,7 +163,7 @@ async def test_complete_workflow():
 
         selection = {
             "startup_id": "startup-cleantech-001",
-            "justification": "Superior technical approach with proven team"
+            "selection_reason": "Superior technical approach with proven team"
         }
 
         r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/startup-selection", json=selection)
@@ -172,7 +172,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Startup selected")
+        print(f"PASS Startup selected")
         print()
 
         # STEP 8: Create Pilot (PILOT_CREATED)
@@ -192,7 +192,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Pilot created")
+        print(f"PASS Pilot created")
         print()
 
         # STEP 9: Track Milestone (MILESTONE_TRACKED)
@@ -212,7 +212,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Milestone created")
+        print(f"PASS Milestone created")
         print()
 
         # STEP 10: Submit Evidence (EVIDENCE_COLLECTED)
@@ -233,7 +233,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Evidence submitted")
+        print(f"PASS Evidence submitted")
         print()
 
         # STEP 11: Evaluate Milestone (MILESTONE_EVALUATED)
@@ -247,12 +247,12 @@ async def test_complete_workflow():
             return False
 
         milestone_eval = r.json()
-        print(f"✓ Milestone evaluated")
+        print(f"PASS Milestone evaluated")
         print(f"  Result: {milestone_eval.get('result', 'unknown')}")
         print()
 
         # STEP 12: Final Evaluation (FINAL_EVALUATION) - Real EvaluatorAdapter
-        print("STEP 12: FINAL EVALUATION - Real EvaluatorAdapter → localhost:8004")
+        print("STEP 12: FINAL EVALUATION - Real EvaluatorAdapter -> localhost:8004")
         print("-" * 100)
 
         eval_result = {
@@ -268,7 +268,7 @@ async def test_complete_workflow():
             return False
 
         final_eval = r.json()
-        print(f"✓ Final evaluation via adapter")
+        print(f"PASS Final evaluation via adapter")
         print(f"  Adapter: {final_eval.get('adapter_called', 'unknown')}")
         print(f"  Service: {final_eval.get('service_target', 'unknown')}")
         print(f"  Human decision required: {final_eval.get('human_decision_remains_required', 'unknown')}")
@@ -290,7 +290,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Performance updated")
+        print(f"PASS Performance updated")
         print()
 
         # STEP 14: Scale Recommendation (SCALE_RECOMMENDATION)
@@ -308,7 +308,7 @@ async def test_complete_workflow():
             print(f"Response: {r.text[:200]}")
             return False
 
-        print(f"✓ Scale recommendation submitted")
+        print(f"PASS Scale recommendation submitted")
         print()
 
         # STEP 15: Final Decision Gate (AWAITING_FINAL_DECISION)
@@ -321,18 +321,18 @@ async def test_complete_workflow():
         if r.status_code != 400 and r.status_code != 422:
             print(f"  ⚠ Expected 400/422 for invalid decision, got {r.status_code}")
         else:
-            print(f"  ✓ Invalid transition rejected")
+            print(f"  PASS Invalid transition rejected")
 
         # Now valid approval (COMPLETED)
         print("  Testing valid human approval...")
-        r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/final-decision", json={"decision": "APPROVE"})
+        r = await client.post(f"{ORCHESTRATOR}/api/workflows/{wf_id}/final-decision", json={"decision":"APPROVE"})
         if r.status_code != 200:
             print(f"ERROR: Final decision failed - {r.status_code}")
             print(f"Response: {r.text[:200]}")
             return False
 
         final_dec = r.json()
-        print(f"✓ Final decision: {final_dec.get('decision', 'unknown')}")
+        print(f"PASS Final decision: {final_dec.get('decision', 'unknown')}")
         print()
 
         # STEP 16: Verify COMPLETED State
@@ -345,14 +345,14 @@ async def test_complete_workflow():
             return False
 
         wf_final = r.json()
-        print(f"✓ Workflow retrieved")
+        print(f"PASS Workflow retrieved")
         print(f"  State: {wf_final['state']}")
 
         if wf_final['state'] != "COMPLETED":
             print(f"ERROR: Expected state COMPLETED, got {wf_final['state']}")
             return False
 
-        print(f"✓ State is COMPLETED")
+        print(f"PASS State is COMPLETED")
         print()
 
         # STEP 17: Verify Audit Trail
@@ -365,7 +365,7 @@ async def test_complete_workflow():
             return False
 
         audit = r.json()
-        print(f"✓ Audit trail retrieved")
+        print(f"PASS Audit trail retrieved")
         print(f"  Events: {len(audit)}")
         print(f"  First event: {audit[0].get('event', 'unknown') if audit else 'N/A'}")
         print(f"  Last event: {audit[-1].get('event', 'unknown') if audit else 'N/A'}")
@@ -386,7 +386,7 @@ async def test_complete_workflow():
             print(f"ERROR: State not persisted - expected COMPLETED, got {wf_reload['state']}")
             return False
 
-        print(f"✓ Workflow reloaded from SQLite")
+        print(f"PASS Workflow reloaded from SQLite")
         print(f"  State: {wf_reload['state']}")
         print(f"  Audit events persisted: {len(audit)} events")
         print()
@@ -401,10 +401,10 @@ async def test_complete_workflow():
         print(f"Transitions: 16")
         print(f"Audit Events: {len(audit)}")
         print(f"Four Agents Called:")
-        print(f"  • PitchEvaluatorAdapter → localhost:8001")
-        print(f"  • RiskDetectorAdapter → localhost:8003 (Gemini inference)")
-        print(f"  • EvaluatorAdapter → localhost:8004")
-        print(f"  • PS Finder → localhost:8002 (available for discovery)")
+        print(f"  • PitchEvaluatorAdapter -> localhost:8001")
+        print(f"  • RiskDetectorAdapter -> localhost:8003 (Gemini inference)")
+        print(f"  • EvaluatorAdapter -> localhost:8004")
+        print(f"  • PS Finder -> localhost:8002 (available for discovery)")
         print()
 
         return True

@@ -167,7 +167,8 @@ async def assess_risk(workflow_id: str, db=Depends(get_db)):
     return {"status": "risk_assessed", "adapter_called": "RiskDetectorAdapter", "service_target": "localhost:8003", "fabricated_result": False}
 
 @app.post("/api/workflows/{workflow_id}/human-review", response_model=dict)
-def submit_human_review(workflow_id: str, decision: str, db=Depends(get_db)):
+def submit_human_review(workflow_id: str, review: dict, db=Depends(get_db)):
+    decision = review.get("decision", "")
     db_wf = db.query(WorkflowModel).filter(WorkflowModel.workflow_id == workflow_id).first()
     if not db_wf:
         raise HTTPException(status_code=404)
