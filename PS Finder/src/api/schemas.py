@@ -26,7 +26,7 @@ class ExplainResponse(BaseModel):
     opportunity_id: str
     problem: str
     why_it_matters: str
-    who_is_affected: str
+    who_is_affected: str | List[str]
     what_org_wants: str
     key_requirements: List[str]
     constraints: List[str]

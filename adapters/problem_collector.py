@@ -8,7 +8,7 @@ class ProblemCollectorAdapter:
 
     async def search_opportunities(self, query: str) -> List[Opportunity]:
         async with httpx.AsyncClient() as client:
-            response = await client.post(f"{self.api_url}/api/opportunities/search", json={"q": query})
+            response = await client.post(f"{self.api_url}/api/opportunities/search", json={"query": query})
             response.raise_for_status()
             data = response.json()
             return [Opportunity(**item) for item in data]

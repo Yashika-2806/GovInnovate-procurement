@@ -49,7 +49,7 @@ class Settings(BaseSettings):
 
     # Server
     HOST: str = "0.0.0.0"
-    PORT: int = 8000
+    PORT: int = 8002
 
     # Rate Limiting & Safety
     REQUEST_TIMEOUT_SECONDS: int = 30

@@ -38,7 +38,7 @@ def get_db():
 
 # P3 — ProblemCollectorAdapter available at adapter layer; opportunity intake remains externally supplied (existing behavior preserved)
 # Integration point: adapter wired at module level; future intake endpoint can call problem_collector.search_opportunities(query)
-problem_collector = ProblemCollectorAdapter("http://localhost:8001")
+problem_collector = ProblemCollectorAdapter("http://localhost:8002")
 pitch_evaluator = PitchEvaluatorAdapter("http://localhost:8001")
 risk_detector = RiskDetectorAdapter("http://localhost:8000")
 evaluator = EvaluatorAdapter("http://localhost:8003")
@@ -223,17 +223,17 @@ async def assess_risk(workflow_id: str, db=Depends(get_db)):
             risk_result = await risk_detector.assess_risk(opp)
             instance.risk_assessment = risk_result
             # Record adapter evidence in audit context
-            instance.history.append({"agent": "RiskDetectorAdapter", "service": "localhost:8002", "status": "called", "structured_output": risk_result.model_dump() if risk_result else None, "note": "Service unavailable — adapter attempted, no fabricated result"})
+            instance.history.append({"agent": "RiskDetectorAdapter", "service": "localhost:8000", "status": "called", "structured_output": risk_result.model_dump() if risk_result else None, "note": "Service unavailable — adapter attempted, no fabricated result"})
         except Exception as adapter_err:
             # P7 — Failure behavior: clear error; no fabricated result; preserve workflow state
-            raise HTTPException(status_code=503, detail=f"RiskDetector service unavailable at localhost:8002 ({adapter_err}). No AI result fabricated. Workflow state preserved at {instance.state.name}.")
+            raise HTTPException(status_code=503, detail=f"RiskDetector service unavailable at localhost:8000 ({adapter_err}). No AI result fabricated. Workflow state preserved at {instance.state.name}.")
         instance.transition_to(ProcurementState.RISK_ASSESSED, "RISK_ASSESSED", "Risk assessment completed via RiskDetectorAdapter")
     except ValueError as e:
         raise HTTPException(status_code=409, detail=str(e))
     db_wf.state = instance.state.name
     db_wf.context = instance.to_dict()
     db.commit()
-    return {"status": "risk_assessed", "adapter_called": "RiskDetectorAdapter", "service_target": "localhost:8002", "fabricated_result": False}
+    return {"status": "risk_assessed", "adapter_called": "RiskDetectorAdapter", "service_target": "localhost:8000", "fabricated_result": False}
 
 @app.post("/api/workflows/{workflow_id}/human-review", response_model=dict)
 def submit_human_review(workflow_id: str, decision: str, db=Depends(get_db)):
