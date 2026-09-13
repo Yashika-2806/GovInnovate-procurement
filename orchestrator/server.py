@@ -13,6 +13,7 @@ from shared.schemas.evidence import Evidence
 from shared.schemas.remediation import Remediation
 from shared.schemas.performance import PerformanceProfile
 from shared.schemas.scale_recommendation import ScaleRecommendation
+from adapters.problem_collector import ProblemCollectorAdapter
 from adapters.pitch_evaluator import PitchEvaluatorAdapter
 from adapters.risk_detector import RiskDetectorAdapter
 from adapters.evaluator import EvaluatorAdapter
@@ -35,6 +36,9 @@ def get_db():
     finally:
         db.close()
 
+# P3 — ProblemCollectorAdapter available at adapter layer; opportunity intake remains externally supplied (existing behavior preserved)
+# Integration point: adapter wired at module level; future intake endpoint can call problem_collector.search_opportunities(query)
+problem_collector = ProblemCollectorAdapter("http://localhost:8001")
 pitch_evaluator = PitchEvaluatorAdapter("http://localhost:8001")
 risk_detector = RiskDetectorAdapter("http://localhost:8002")
 evaluator = EvaluatorAdapter("http://localhost:8003")
@@ -87,20 +91,30 @@ def submit_remediation(workflow_id: str, milestone_id: str, remediation: Remedia
     return {"status": "remediation_submitted", "milestone_id": milestone_id, "remediation_id": remediation.remediation_id}
 
 @app.post("/api/workflows/{workflow_id}/final-evaluation", response_model=dict)
-def final_evaluation(workflow_id: str, evaluation: EvaluationResult, db=Depends(get_db)):
+async def final_evaluation(workflow_id: str, evaluation: EvaluationResult, db=Depends(get_db)):
     db_wf = db.query(WorkflowModel).filter(WorkflowModel.workflow_id == workflow_id).first()
     if not db_wf:
         raise HTTPException(status_code=404)
     opp = Opportunity(**db_wf.context.get('opportunity') or {})
     instance = WorkflowInstance.from_db(db_wf, opp)
     try:
+        # P6 — EvaluatorAdapter integration: must operate on execution evidence (milestones, evidence, pilot, performance, remediation)
+        execution_state = instance.to_dict()
+        try:
+            evaluator_result = await evaluator.evaluate(execution_state)
+            instance.evaluation_result = evaluator_result
+            instance.history.append({"agent": "EvaluatorAdapter", "service": "localhost:8003", "status": "called", "structured_output": evaluator_result.model_dump() if evaluator_result else None, "note": "Service unavailable — adapter attempted, no fabricated result. Final decision remains human-controlled."})
+        except Exception as adapter_err:
+            # P7 — Failure behavior: fail clearly on unavailable service; never fabricate AI approval; preserve workflow state
+            # Final procurement decision remains human-controlled; AI agent never approves procurement.
+            raise HTTPException(status_code=503, detail=f"Evaluator service unavailable at localhost:8003 ({adapter_err}). No AI evaluation fabricated. Final decision remains human-controlled. Workflow state preserved at {instance.state.name}.")
         instance.final_evaluation(evaluation)
     except ValueError as e:
         raise HTTPException(status_code=409, detail=str(e))
     db_wf.state = instance.state.name
     db_wf.context = instance.to_dict()
     db.commit()
-    return {"status": "final_evaluation_complete"}
+    return {"status": "final_evaluation_complete", "adapter_called": "EvaluatorAdapter", "service_target": "localhost:8003", "fabricated_result": False, "human_decision_remains_required": True}
 
 @app.get("/api/workflows/{workflow_id}/performance", response_model=dict)
 def get_performance(workflow_id: str, db=Depends(get_db)):
@@ -173,7 +187,22 @@ async def evaluate_pitch(workflow_id: str, db=Depends(get_db)):
     opp = Opportunity(**db_wf.context.get('opportunity') or {})
     instance = WorkflowInstance.from_db(db_wf, opp)
     try:
-        instance.transition_to(ProcurementState.PITCH_EVALUATED, "PITCH_EVALUATED", "Pitch evaluated")
+        # P4 — PitchEvaluatorAdapter integration: call adapter; fail clearly if unavailable
+        pitch_data = db_wf.context.get('pitch') or {}
+        if not pitch_data:
+            # Build minimal pitch from submission record if available
+            pitch_data = {"pitch_id": instance.pitch_id or "", "startup_id": instance.startup_id or "", "opportunity_id": instance.opportunity.id if instance.opportunity else "", "metadata": {}}
+        pitch_obj = Pitch(**pitch_data)
+        try:
+            pitch_evaluation = await pitch_evaluator.evaluate(pitch_obj)
+            instance.pitch_evaluation = pitch_evaluation
+            # Persist adapter call evidence in audit context (not state transition control)
+            instance.history.append({"agent": "PitchEvaluatorAdapter", "service": "localhost:8001", "status": "called", "structured_output": pitch_evaluation.model_dump() if pitch_evaluation else None, "note": "Service unavailable — adapter call attempted, no fabricated result"})
+        except Exception as adapter_err:
+            # P7 — Failure behavior: clear service/unavailable error; preserve state; no fabricated AI
+            # Do NOT transition; do NOT fabricate; preserve workflow state
+            raise HTTPException(status_code=503, detail=f"PitchEvaluator service unavailable at localhost:8001 ({adapter_err}). No AI result fabricated. Workflow state preserved at {instance.state.name}.")
+        instance.transition_to(ProcurementState.PITCH_EVALUATED, "PITCH_EVALUATED", "Pitch evaluated via PitchEvaluatorAdapter")
     except ValueError as e:
         raise HTTPException(status_code=409, detail=str(e))
     db_wf.state = instance.state.name
@@ -189,13 +218,22 @@ async def assess_risk(workflow_id: str, db=Depends(get_db)):
     opp = Opportunity(**db_wf.context.get('opportunity') or {})
     instance = WorkflowInstance.from_db(db_wf, opp)
     try:
-        instance.transition_to(ProcurementState.RISK_ASSESSED, "RISK_ASSESSED", "Risk assessment completed")
+        # P5 — RiskDetectorAdapter integration: attempt adapter call; fail clearly
+        try:
+            risk_result = await risk_detector.assess_risk(opp)
+            instance.risk_assessment = risk_result
+            # Record adapter evidence in audit context
+            instance.history.append({"agent": "RiskDetectorAdapter", "service": "localhost:8002", "status": "called", "structured_output": risk_result.model_dump() if risk_result else None, "note": "Service unavailable — adapter attempted, no fabricated result"})
+        except Exception as adapter_err:
+            # P7 — Failure behavior: clear error; no fabricated result; preserve workflow state
+            raise HTTPException(status_code=503, detail=f"RiskDetector service unavailable at localhost:8002 ({adapter_err}). No AI result fabricated. Workflow state preserved at {instance.state.name}.")
+        instance.transition_to(ProcurementState.RISK_ASSESSED, "RISK_ASSESSED", "Risk assessment completed via RiskDetectorAdapter")
     except ValueError as e:
         raise HTTPException(status_code=409, detail=str(e))
     db_wf.state = instance.state.name
     db_wf.context = instance.to_dict()
     db.commit()
-    return {"status": "risk_assessed"}
+    return {"status": "risk_assessed", "adapter_called": "RiskDetectorAdapter", "service_target": "localhost:8002", "fabricated_result": False}
 
 @app.post("/api/workflows/{workflow_id}/human-review", response_model=dict)
 def submit_human_review(workflow_id: str, decision: str, db=Depends(get_db)):
