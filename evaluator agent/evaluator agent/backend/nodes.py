@@ -1,9 +1,16 @@
 import datetime
 from typing import Dict, Any, List
-from backend.state import (
-    EvaluatorState, EvidenceItem, Milestone, KPI, ScoringWeights,
-    MilestoneScore, ContextualPerformanceProfile, AuditLogEntry
-)
+
+try:
+    from backend.state import (
+        EvaluatorState, EvidenceItem, Milestone, KPI, ScoringWeights,
+        MilestoneScore, ContextualPerformanceProfile, AuditLogEntry
+    )
+except (ImportError, ModuleNotFoundError):
+    from state import (
+        EvaluatorState, EvidenceItem, Milestone, KPI, ScoringWeights,
+        MilestoneScore, ContextualPerformanceProfile, AuditLogEntry
+    )
 
 def get_timestamp() -> str:
     return datetime.datetime.now(datetime.timezone.utc).isoformat()

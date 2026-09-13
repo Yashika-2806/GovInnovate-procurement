@@ -1,0 +1,125 @@
+general:
+  problem_risk: 0.10
+  market_risk: 0.10
+  pmf_risk: 0.10
+  competition_risk: 0.10
+  business_model_risk: 0.05
+  financial_risk: 0.05
+  technology_risk: 0.10
+  regulatory_risk: 0.05
+  operational_risk: 0.10
+  team_risk: 0.10
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+healthcare:
+  problem_risk: 0.08
+  market_risk: 0.08
+  pmf_risk: 0.08
+  competition_risk: 0.05
+  business_model_risk: 0.05
+  financial_risk: 0.05
+  technology_risk: 0.12
+  regulatory_risk: 0.15
+  operational_risk: 0.10
+  team_risk: 0.10
+  funding_risk: 0.10
+  macro_risk: 0.04
+
+fintech:
+  problem_risk: 0.05
+  market_risk: 0.10
+  pmf_risk: 0.05
+  competition_risk: 0.10
+  business_model_risk: 0.14
+  financial_risk: 0.10
+  technology_risk: 0.10
+  regulatory_risk: 0.16
+  operational_risk: 0.05
+  team_risk: 0.05
+  funding_risk: 0.05
+  macro_risk: 0.05
+
+consumer_social:
+  problem_risk: 0.05
+  market_risk: 0.15
+  pmf_risk: 0.10
+  competition_risk: 0.15
+  business_model_risk: 0.10
+  financial_risk: 0.05
+  technology_risk: 0.05
+  regulatory_risk: 0.05
+  operational_risk: 0.05
+  team_risk: 0.10
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+saas_b2b:
+  problem_risk: 0.10
+  market_risk: 0.10
+  pmf_risk: 0.10
+  competition_risk: 0.15
+  business_model_risk: 0.05
+  financial_risk: 0.05
+  technology_risk: 0.05
+  regulatory_risk: 0.05
+  operational_risk: 0.10
+  team_risk: 0.10
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+hardware:
+  problem_risk: 0.05
+  market_risk: 0.10
+  pmf_risk: 0.10
+  competition_risk: 0.05
+  business_model_risk: 0.05
+  financial_risk: 0.10
+  technology_risk: 0.10
+  regulatory_risk: 0.05
+  operational_risk: 0.15
+  team_risk: 0.10
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+ecommerce:
+  problem_risk: 0.05
+  market_risk: 0.10
+  pmf_risk: 0.05
+  competition_risk: 0.15
+  business_model_risk: 0.10
+  financial_risk: 0.10
+  technology_risk: 0.05
+  regulatory_risk: 0.05
+  operational_risk: 0.15
+  team_risk: 0.05
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+edtech:
+  problem_risk: 0.10
+  market_risk: 0.10
+  pmf_risk: 0.10
+  competition_risk: 0.10
+  business_model_risk: 0.10
+  financial_risk: 0.10
+  technology_risk: 0.05
+  regulatory_risk: 0.10
+  operational_risk: 0.05
+  team_risk: 0.05
+  funding_risk: 0.10
+  macro_risk: 0.05
+
+cleantech:
+  problem_risk: 0.05
+  market_risk: 0.10
+  pmf_risk: 0.05
+  competition_risk: 0.05
+  business_model_risk: 0.05
+  financial_risk: 0.10
+  technology_risk: 0.10
+  regulatory_risk: 0.15
+  operational_risk: 0.10
+  team_risk: 0.05
+  funding_risk: 0.10
+  macro_risk: 0.10

@@ -1,17 +1,32 @@
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from backend.state import EvaluatorState
-from backend.nodes import (
-    initialize_milestone_node,
-    ingest_evidence_node,
-    evaluate_evidence_node,
-    analyze_security_and_telemetry_subagent_node,
-    calculate_milestone_score_node,
-    generate_justification_node,
-    calculate_escrow_disbursement_node,
-    update_startup_performance_node,
-    determine_next_action_node
-)
+
+try:
+    from backend.state import EvaluatorState
+    from backend.nodes import (
+        initialize_milestone_node,
+        ingest_evidence_node,
+        evaluate_evidence_node,
+        analyze_security_and_telemetry_subagent_node,
+        calculate_milestone_score_node,
+        generate_justification_node,
+        calculate_escrow_disbursement_node,
+        update_startup_performance_node,
+        determine_next_action_node
+    )
+except (ImportError, ModuleNotFoundError):
+    from state import EvaluatorState
+    from nodes import (
+        initialize_milestone_node,
+        ingest_evidence_node,
+        evaluate_evidence_node,
+        analyze_security_and_telemetry_subagent_node,
+        calculate_milestone_score_node,
+        generate_justification_node,
+        calculate_escrow_disbursement_node,
+        update_startup_performance_node,
+        determine_next_action_node
+    )
 
 def route_after_init(state: EvaluatorState) -> str:
     """Conditional router checking if contractual approval blocks evaluation."""

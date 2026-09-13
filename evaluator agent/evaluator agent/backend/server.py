@@ -2,8 +2,15 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
-from backend.graph import evaluator_graph
-from backend.state import ScoringWeights
+
+# Handle imports: try absolute first (when run as module), fall back to relative (when run directly)
+try:
+    from backend.graph import evaluator_graph
+    from backend.state import ScoringWeights
+except (ImportError, ModuleNotFoundError):
+    # Running from backend directory directly
+    from graph import evaluator_graph
+    from state import ScoringWeights
 
 app = FastAPI(
     title="LangGraph Evaluator Agent API",
